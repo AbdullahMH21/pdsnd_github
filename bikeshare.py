@@ -38,6 +38,10 @@ def get_filters():
     print('-'*40)
     return city, month, day
 
+# Define the months list as a constant at the top
+MONTHS = ['january', 'february', 'march', 'april', 'may', 'june']
+
+
 def load_data(city, month, day):
     """Loads the specified data and reads the CSV file of whatever city the user chose and applies the needed filters
 
@@ -58,12 +62,15 @@ def load_data(city, month, day):
     df['month'] = df['Start Time'].dt.month
     df['day_of_week'] = df['Start Time'].dt.day_name()
     df['hour'] = df['Start Time'].dt.hour
+
     if month != 'all':
-        months = ['january', 'february', 'march', 'april', 'may', 'june']
-        month = months.index(month) + 1
+        # Use the MONTHS constant instead of a hardcoded list
+        month = MONTHS.index(month) + 1
         df = df[df['month'] == month]
+
     if day != 'all':
         df = df[df['day_of_week'].str.lower() == day.lower()]
+
     return df
 
 def time_stats(df):
@@ -102,10 +109,10 @@ def trip_duration_stats(df):
     start_time = time.time()
 
     # Calculate total travel time in seconds
-    total_travel_time = df['Trip Duration'].sum()
-    total_hours = int(total_travel_time // 3600)
-    total_minutes = int((total_travel_time % 3600) // 60)
-    total_seconds = int(total_travel_time % 60)
+    total_trip_duration_seconds = df['Trip Duration'].sum()
+    total_hours = int(total_trip_duration_seconds // 3600)
+    total_minutes = int((total_trip_duration_seconds % 3600) // 60)
+    total_seconds = int(total_trip_duration_seconds % 60)
     print(f'Total Travel Time: {total_hours} hours, {total_minutes} minutes, {total_seconds} seconds')
 
     # Calculate mean travel time in seconds
