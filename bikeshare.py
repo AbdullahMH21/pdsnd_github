@@ -17,7 +17,7 @@ def get_filters():
        (str) day: choose which day in particular, or "all" to apply no filter
     """
     print("Hello! Let's explore some US bikeshare data!")
-    while True: #Specifying the city
+    while True: # Loop until a valid city is selected
         city = input("Would you like to see data for Chicago, New York City, or Washington? ").strip().lower()
         if city in ['chicago', 'new york city', 'washington']:
             break
@@ -51,6 +51,9 @@ def load_data(city, month, day):
     """
     # Load and filter data based on user selections
     df = pd.read_csv(CITY_DATA[city])
+    # Convert 'Start Time' to datetime format for easy extraction of month and day
+    df['Start Time'] = pd.to_datetime(df['Start Time'])
+
     df['Start Time'] = pd.to_datetime(df['Start Time'])
     df['month'] = df['Start Time'].dt.month
     df['day_of_week'] = df['Start Time'].dt.day_name()
